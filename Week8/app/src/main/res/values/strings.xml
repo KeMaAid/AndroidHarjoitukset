@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Week 8</string>
+    <string-array name="Sodas">
+        <item>Iso Fanta</item>
+        <item>Pieni Fanta</item>
+        <item>Iso Cola</item>
+        <item>Pieni Cola</item>
+        <item>Iso Pepsi</item>
+        <item>Pieni Pepsi</item>
+    </string-array>
+</resources>
