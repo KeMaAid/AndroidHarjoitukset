@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -70,11 +72,23 @@ public class CinemaController {
         return payload;
     }
 
-    public String[] getMovies(int index, String searchword, LocalDate date, LocalTime open, LocalTime close){
-        final String sUrl = "https://www.finnkino.fi/xml/Schedule/?area="+cinemas.get(index).getId()+"&dt="+date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    public String getCinemaName(int ID){
+        for(Cinema c : cinemas){
+            if(c.getId()==ID){
+                return c.getName();
+            }
+        }
+        return null;
+    }
+    public int getCinemaID(int placement){
+        return this.cinemas.get(placement).getId();
+    }
+
+    public Movie[] getMovies(int ID, String searchword, LocalDate date, LocalTime open, LocalTime close){
+        final String sUrl = "https://www.finnkino.fi/xml/Schedule/?area="+ID+"&dt="+date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
         Document doc = null;
-        ArrayList<String> movies = new ArrayList<>();
+        ArrayList<Movie> movies = new ArrayList<>();
 
         try {
             DocumentBuilder dbuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -102,29 +116,43 @@ public class CinemaController {
                     Node movieNode = element.getElementsByTagName("Show").item(j);
                     if (movieNode.getNodeType() == Node.ELEMENT_NODE) {
                         Element movie = (Element) movieNode;
-
-                        if (open == null && close == null) {
-                            movies.add(movie.getElementsByTagName("Title").item(0).getTextContent());
-                        } else if (close == null) {
-                            LocalTime startTime = stripper(movie.getElementsByTagName("dttmShowStart").item(0).getTextContent());
-                            if (open.compareTo(startTime) <= 0) {
-                                movies.add(movie.getElementsByTagName("Title").item(0).getTextContent());
-                            }
-                        } else {
-                            LocalTime startTime = stripper(movie.getElementsByTagName("dttmShowStart").item(0).getTextContent());
-                            if (open.compareTo(startTime) <= 0 && close.compareTo(startTime) >= 0) {
-                                movies.add(movie.getElementsByTagName("Title").item(0).getTextContent());
-                            }
-                        }
+                        movies.add(new Movie(movie.getElementsByTagName("Title").item(0).getTextContent(),
+                                Integer.parseInt(movie.getElementsByTagName("ID").item(0).getTextContent()),
+                                Integer.parseInt(movie.getElementsByTagName("TheatreID").item(0).getTextContent()),
+                                stripper(movie.getElementsByTagName("dttmShowStart").item(0).getTextContent())));
                     }
                 }
             }
         }
+
+        //filtering
         if(!searchword.equals("")){
-            movies = (ArrayList<String>) movies.stream().filter(title -> title.contains(searchword)).collect(Collectors.toList());
+            movies = (ArrayList<Movie>) movies.stream().filter(movie -> movie.getTitle().contains(searchword)).collect(Collectors.toList());
         }
 
-        return movies.toArray(new String[0]);
+        if (close != null && open != null) {
+            movies = (ArrayList<Movie>) movies.stream().filter(movie -> open.compareTo(movie.getStartTime())<=0).filter(movie -> close.compareTo(movie.getStartTime())>=0).collect(Collectors.toList());
+        } else if (close != null){
+            movies = (ArrayList<Movie>) movies.stream().filter(movie -> open.compareTo(movie.getStartTime())<=0).collect(Collectors.toList());
+        }
+
+        return movies.toArray(new Movie[0]);
+    }
+
+    public Map<String, ArrayList<Movie>> findMovies(String searchword, LocalDate date, LocalTime open, LocalTime close){
+        int[] placements = {1039,1038,1045,1031,1032,1033,1013,1015,1016,1017,1018,1019,1034,1035,1022, 1041};
+        Map<String, ArrayList<Movie>> movies = new HashMap<String, ArrayList<Movie>>();
+
+        for(int placement: placements){
+            Movie[] movieArray = getMovies(placement, searchword, date, open, close);
+            for(Movie movie: movieArray){
+                movies.putIfAbsent(movie.getTitle(), new ArrayList<>());
+                movie.setLocationID(placement);
+                movies.get(movie.getTitle()).add(movie);
+            }
+        }
+
+        return movies;
     }
     //strips hours and mins from formatted input
     private LocalTime stripper(String input){

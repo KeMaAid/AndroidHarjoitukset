@@ -23,7 +23,9 @@ import android.widget.TimePicker;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private LinearLayout linearLayoutMovies;
@@ -108,23 +110,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadMovies(){
-        String[] data = cc.getMovies(this.positionTheatre, this.editTextSearchword.getText().toString(), this.localDate, this.openTime, this.closeTime);
-        TextView movies = new TextView(this);
-        if(data.length ==0){
-            movies.append("No movies to show");
+        TextView moviesView = new TextView(this);
+        if(this.positionTheatre ==0){
+            Map<String, ArrayList<Movie>> movies = cc.findMovies(this.editTextSearchword.getText().toString(), this.localDate, this.openTime, this.closeTime);
+            if (movies.size() == 0) {
+                moviesView.append("No movies to show");
+            } else {
+                for (String key : movies.keySet()) {
+                    moviesView.append(key+"\n");
+
+                    for (Movie movie : movies.get(key)) {
+                        String cinemaName = cc.getCinemaName(movie.getLocationID());
+                        if(cinemaName != null) {
+                            moviesView.append("\t" + cinemaName +" "+ movie.getStartTime()+ "\n");
+                        }
+                    }
+                }
+            }
         } else {
-            for (String movie : data) {
-                movies.append(movie + "\n");
+            Movie[] movies = cc.getMovies(cc.getCinemaID(this.positionTheatre), this.editTextSearchword.getText().toString(), this.localDate, this.openTime, this.closeTime);
+            if (movies.length == 0) {
+                moviesView.append("No movies to show");
+            } else {
+                for (Movie movie : movies) {
+                    moviesView.append(movie + "\n");
+                }
             }
         }
-        //DEBUG /*
-        System.out.println("NOW SHOWING MOVIES:\n");
-        for(String s: data){
-            System.out.println("Movie: "+ s);
-        }
-        //*/
+
         linearLayoutMovies.removeAllViews();
-        linearLayoutMovies.addView(movies);
+        linearLayoutMovies.addView(moviesView);
     }
     public void handleClickDate(View view){
         DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
