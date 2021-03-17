@@ -127,13 +127,14 @@ public class CinemaController {
 
         //filtering
         if(!searchword.equals("")){
-            movies = (ArrayList<Movie>) movies.stream().filter(movie -> movie.getTitle().contains(searchword)).collect(Collectors.toList());
+            movies = (ArrayList<Movie>) movies.stream().filter(movie -> movie.getTitle().toLowerCase().contains(searchword.toLowerCase())).collect(Collectors.toList());
         }
 
-        if (close != null && open != null) {
-            movies = (ArrayList<Movie>) movies.stream().filter(movie -> open.compareTo(movie.getStartTime())<=0).filter(movie -> close.compareTo(movie.getStartTime())>=0).collect(Collectors.toList());
-        } else if (close != null){
+        if (open != null) {
             movies = (ArrayList<Movie>) movies.stream().filter(movie -> open.compareTo(movie.getStartTime())<=0).collect(Collectors.toList());
+        }
+        if (close != null){
+            movies = (ArrayList<Movie>) movies.stream().filter(movie -> close.compareTo(movie.getStartTime())>=0).collect(Collectors.toList());
         }
 
         return movies.toArray(new Movie[0]);

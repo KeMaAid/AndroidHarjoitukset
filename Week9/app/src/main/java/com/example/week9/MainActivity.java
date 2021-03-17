@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadMovies(){
         TextView moviesView = new TextView(this);
-        if(this.positionTheatre ==0){
+        if(this.positionTheatre == 0){
             Map<String, ArrayList<Movie>> movies = cc.findMovies(this.editTextSearchword.getText().toString(), this.localDate, this.openTime, this.closeTime);
             if (movies.size() == 0) {
                 moviesView.append("No movies to show");
@@ -158,10 +158,11 @@ public class MainActivity extends AppCompatActivity {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute){
                 openTime =LocalTime.of(hourOfDay, minute);
                 buttonOpenTime.setText(openTime.format(DateTimeFormatter.ofPattern("HH:mm")));
+                loadMovies();
             }
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
         timePickerDialog.show();
-        loadMovies();
+
     }
     public void handleClickCloseTime(View view){
         TimePickerDialog timePickerDialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener(){
@@ -169,10 +170,10 @@ public class MainActivity extends AppCompatActivity {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute){
                 closeTime =LocalTime.of(hourOfDay, minute);
                 buttonCloseTime.setText(closeTime.format(DateTimeFormatter.ofPattern("HH:mm")));
+                loadMovies();
             }
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
         timePickerDialog.show();
-        loadMovies();
     }
 
 }

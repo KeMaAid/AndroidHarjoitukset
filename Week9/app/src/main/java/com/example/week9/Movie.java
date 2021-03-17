@@ -15,6 +15,11 @@ public class Movie {
         this.startTime=startTime;
     }
 
+    @Override
+    public String toString(){
+        return getTitle() +" "+ getStartTime();
+    }
+
     public int getID() {
         return ID;
     }
