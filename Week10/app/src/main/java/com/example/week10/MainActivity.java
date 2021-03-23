@@ -23,7 +23,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         webView = findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebViewClient(new WebViewClient());
+        webView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                handleButtons();
+            };
+        });
+        webView.loadUrl("about:blank");
         searchButton = findViewById(R.id.buttonSearch);
         reloadButton = findViewById(R.id.buttonReload);
         goBackButton = findViewById(R.id.buttonGoBack);
@@ -35,9 +41,11 @@ public class MainActivity extends AppCompatActivity {
         String payload = "https://";
         payload += urlInput.getText().toString();
         webView.loadUrl(payload);
+        handleButtons();
     }
     public void handleRefreshClick(View view){
         webView.reload();
+        handleButtons();
     }
 
     public void handleInitClick(View view){
@@ -45,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         if(!payload.equals(webView.getUrl())){
             webView.loadUrl(payload);
         }
+        handleButtons();
         webView.evaluateJavascript("javascript:initialize()", null);
 
 
@@ -54,12 +63,28 @@ public class MainActivity extends AppCompatActivity {
         if(!payload.equals(webView.getUrl())){
             webView.loadUrl(payload);
         }
+        handleButtons();
         webView.evaluateJavascript("javascript:shoutOut()", null);
     }
     public void handleGoBackClick(View view){
         webView.goBack();
+        handleButtons();
     }
     public void handleGoForwardClick(View view){
         webView.goForward();
+        handleButtons();
+    }
+    public void handleButtons(){
+        if(!webView.canGoForward()){
+            goForwardButton.setEnabled(false);
+        } else {
+            goForwardButton.setEnabled(true);
+        }
+        if(!webView.canGoBack()){
+            goBackButton.setEnabled(false);
+        } else {
+            goBackButton.setEnabled(true);
+        }
+        urlInput.setText(webView.getUrl().substring(8));
     }
 }
