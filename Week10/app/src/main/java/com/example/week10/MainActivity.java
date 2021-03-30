@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
                 handleButtons();
             };
         });
-        webView.loadUrl("about:blank");
         searchButton = findViewById(R.id.buttonSearch);
         reloadButton = findViewById(R.id.buttonReload);
         goBackButton = findViewById(R.id.buttonGoBack);
@@ -40,12 +39,12 @@ public class MainActivity extends AppCompatActivity {
     public void handleSearchClick(View view){
         String payload = "https://";
         payload += urlInput.getText().toString();
-        webView.loadUrl(payload);
-        handleButtons();
+        if(!payload.equals(webView.getUrl())){
+            webView.loadUrl(payload);
+        }
     }
     public void handleRefreshClick(View view){
         webView.reload();
-        handleButtons();
     }
 
     public void handleInitClick(View view){
@@ -53,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         if(!payload.equals(webView.getUrl())){
             webView.loadUrl(payload);
         }
-        handleButtons();
         webView.evaluateJavascript("javascript:initialize()", null);
 
 
@@ -63,16 +61,13 @@ public class MainActivity extends AppCompatActivity {
         if(!payload.equals(webView.getUrl())){
             webView.loadUrl(payload);
         }
-        handleButtons();
         webView.evaluateJavascript("javascript:shoutOut()", null);
     }
     public void handleGoBackClick(View view){
         webView.goBack();
-        handleButtons();
     }
     public void handleGoForwardClick(View view){
         webView.goForward();
-        handleButtons();
     }
     public void handleButtons(){
         if(!webView.canGoForward()){
@@ -85,6 +80,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             goBackButton.setEnabled(true);
         }
-        urlInput.setText(webView.getUrl().substring(8));
+        urlInput.setText(webView.getOriginalUrl().substring(8));
     }
 }
