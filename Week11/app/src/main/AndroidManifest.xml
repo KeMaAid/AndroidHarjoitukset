@@ -10,10 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Week11">
         <activity
-            android:name=".SettingsDrawer"
-            android:label="@string/title_activity_settings_drawer"
-            android:theme="@style/Theme.Week11.NoActionBar"></activity>
-        <activity android:name=".MainActivity">
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Week11.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
