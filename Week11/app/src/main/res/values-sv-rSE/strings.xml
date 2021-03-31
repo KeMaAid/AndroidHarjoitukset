@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="navigation_drawer_open">Öpna Navigation</string>
+    <string name="navigation_drawer_close">Clöserna Navigation</string>
+    <string name="nav_header_desc">Navigation häder</string>
+    <string name="action_settings">Sättings</string>
+    <string name="menu_home">Hem</string>
+    <string name="menu_settings">Sättings</string>
+    <string name="enable_textfield">TäxtField ön</string>
+    <string name="fontsize">fönt Siz</string>
+    <string name="width">Leveå</string>
+    <string name="hight">kårkea</string>
+    <string name="number_of_rows">röw</string>
+    <string name="display_text">Endtexterna</string>
+    <string name="type_here">Typer här</string>
+    <string name="text_welcome_home">Det är Hemscreen</string>
+    <string name="text_welcome_settings">Det är Settingscreen</string>
+</resources>

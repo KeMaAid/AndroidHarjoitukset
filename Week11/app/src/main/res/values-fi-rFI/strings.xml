@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="navigation_drawer_open">Avaa navigaatio</string>
+    <string name="navigation_drawer_close">Sulje navigaatio</string>
+    <string name="nav_header_desc">Navigaatio otsikko</string>
+    <string name="action_settings">Settings</string>
+    <string name="menu_home">Koti</string>
+    <string name="menu_settings">Asetukset</string>
+    <string name="enable_textfield">Tekstikenttä päällä</string>
+    <string name="fontsize">Fonttikoko</string>
+    <string name="width">Leveys</string>
+    <string name="hight">Korkeus</string>
+    <string name="number_of_rows">Rivien määrä</string>
+    <string name="display_text">Lopputeksti</string>
+    <string name="type_here">Kirjoita tähän</string>
+    <string name="text_welcome_home">Tämä on Kotinäyttö</string>
+    <string name="text_welcome_settings">Tämä on Asetusnäyttö</string>
+</resources>
