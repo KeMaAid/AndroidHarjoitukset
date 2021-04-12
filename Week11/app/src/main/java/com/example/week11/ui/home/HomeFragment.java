@@ -40,6 +40,22 @@ public class HomeFragment extends Fragment {
 
         settingStorage = SettingStorage.getInstance();
         editText = view.findViewById(R.id.editTextInput);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                settingStorage.setStoredString(s.toString());
+            }
+        });
         textViewOut = view.findViewById(R.id.textViewOutput);
     }
 
@@ -55,11 +71,13 @@ public class HomeFragment extends Fragment {
         super.onStart();
 
         editText.setEnabled(settingStorage.isInputEnabled());
-
+        textViewOut.setText(settingStorage.getStoredString());
+        textViewOut.append("\n\n"+settingStorage.getDisplayText());
+        /*
         if (!settingStorage.isInputEnabled()){
             textViewOut.setText(settingStorage.getStoredString());
             textViewOut.append("\n\n"+settingStorage.getDisplayText());
-        }
+        }*/
         textViewOut.setTextSize(settingStorage.getFontSize());
         textViewOut.setWidth(settingStorage.getInputWidth());
         textViewOut.setHeight(settingStorage.getInputHight());

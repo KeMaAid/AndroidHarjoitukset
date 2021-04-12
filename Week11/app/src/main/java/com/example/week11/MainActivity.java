@@ -74,6 +74,4 @@ public class MainActivity extends AppCompatActivity {
         resources.updateConfiguration(config, resources.getDisplayMetrics());
         System.out.println("###################### "+settingStorage.getSelectedLang()+" ##################");
     }
-
-
 }

@@ -17,5 +17,10 @@
         android:label="@string/menu_settings"
         tools:layout="@layout/fragment_settings" />
 
+    <fragment
+        android:id="@+id/nav_test"
+        android:name="com.example.week11.ui.test.testFragment"
+        android:label="TESTI"
+        tools:layout="@layout/test_fragment" />
 
 </navigation>
